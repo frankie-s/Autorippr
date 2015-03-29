@@ -134,27 +134,26 @@ def rip(config):
             mkv_api.set_title(dvd["discTitle"])
             mkv_api.set_index(dvd["discIndex"])
 
-            movie_title = mkv_api.get_title()
+            disc_title = mkv_api.get_title()
 
-            movie_path = '%s/%s' % (mkv_save_path, movie_title)
+            movie_path = '%s/%s' % (mkv_save_path, disc_title)
             if not os.path.exists(movie_path):
                 os.makedirs(movie_path)
 
-                mkv_api.get_disc_info()
+                mkv_api.get_disc_info(config['makemkv']['tvMode'])
 
                 saveFiles = mkv_api.get_savefiles()
 
                 if len( saveFiles ) != 0:
 
-                    # Force filebot disable for multiple titles
-                    forceDisableFB = True if len( saveFiles ) > 1 else False
-
                     for dvdTitle in saveFiles:
+
+                        movie_title = ""
 
                         dbmovie = database.insert_movie(
                             movie_title,
                             movie_path,
-                            forceDisableFB
+                            config['filebot']['enable'] if len( saveFiles ) > 1 else False
                         )
 
                         database.insert_history(

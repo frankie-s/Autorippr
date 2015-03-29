@@ -244,7 +244,7 @@ class MakeMKV(object):
 
         return drives
 
-    def get_disc_info(self):
+    def get_disc_info(self, singleReturn):
         """
             Returns information about the selected disc
 
@@ -292,6 +292,9 @@ class MakeMKV(object):
                 ))
 
                 title = self._read_mkv_messages("TINFO", titleNo, 27)[0]
+
+                if singleReturn and len( self.saveFiles ) != 0:
+                    pass
 
                 self.saveFiles.append({
                     'index': titleNo,
